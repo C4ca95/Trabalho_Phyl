@@ -1,7 +1,5 @@
 const axios = require('axios')
 const Dev = require('../model/Dev')
-const Vaga = require('../model/Vaga')
-const List = require('./listItems')
 
 module.exports = {
 
@@ -72,13 +70,28 @@ module.exports = {
         }
     },
 
-    async matchs(req, res){
-        const { user } = req.headers
+    async updateDev(req, res) {
+        const { user } = req.headers;
 
-        const devs = await Vaga.find({matchs: user})
-        let resul = await List.listItems(devs, req.query.pg, req.query.vs)
-        return res.json(resul)
+        try {
+            // Encontrar e atualizar o desenvolvedor com base no ID do usuário
+            const updatedDev = await Dev.findOneAndUpdate(
+                { _id: user },
+                { $set: req.body },
+                { new: true } // Retorna o documento atualizado
+            );
+
+            if (updatedDev) {
+                return res.json({ message: "Desenvolvedor atualizado com sucesso", updatedDev });
+            } else {
+                return res.status(404).json({ error: "Desenvolvedor não encontrado" });
+            }
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ error: "Erro ao atualizar o desenvolvedor" });
+        }
     },
+
 
     async dev(req,res){
 
