@@ -54,6 +54,24 @@ module.exports = {
         return res.json(dev)
     },
 
+    async deleteDev(req, res) {
+        const { user } = req.headers;
+
+        try {
+            // Encontrar e excluir o desenvolvedor com base no ID do usuário
+            const deletedDev = await Dev.findOneAndDelete({ _id: user });
+
+            if (deletedDev) {
+                return res.json({ message: "Desenvolvedor excluído com sucesso", deletedDev });
+            } else {
+                return res.status(404).json({ error: "Desenvolvedor não encontrado" });
+            }
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ error: "Erro ao excluir o desenvolvedor" });
+        }
+    },
+
     async matchs(req, res){
         const { user } = req.headers
 

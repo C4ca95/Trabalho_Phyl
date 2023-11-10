@@ -14,7 +14,7 @@ io.on('connection', socket => {
     console.log('novo', socket.id)
 })
 
-mougoose.connect('mongodb+srv://root:pitoco1569@cluster0-m2l22.mongodb.net/oministack?retryWrites=true&w=majority', {
+mougoose.connect('mongodb+srv://andregomides:Password@cluster0.3sjnhb7.mongodb.net/?retryWrites=true&w=majority', {
     useNewUrlParser: true
 })
 httpserver.use((req,res,next) =>{
