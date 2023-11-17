@@ -1,5 +1,22 @@
 const Candidato = require('../model/Dev');
 
+exports.loginCandidato = async (req, res) => {
+    const { email, senha } = req.body;
+
+    try {
+        const candidato = await Candidato.findOne({ email, senha });
+
+        if (candidato) {
+            // Autenticação bem-sucedida
+            res.json({ mensagem: 'Login bem-sucedido', candidato });
+        } else {
+            res.status(401).json({ mensagem: 'Credenciais inválidas' });
+        }
+    } catch (error) {
+        res.status(500).json({ mensagem: 'Erro no servidor', error });
+    }
+};
+
 exports.criarCandidato = async (req, res) => {
     try {
         const novoCandidato = new Candidato(req.body);
