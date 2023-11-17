@@ -1,24 +1,14 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require('mongoose');
 
-const EmpSchema = new Schema({
-    cidade:{
-        type:String,
-    },
-    senha:{
-        type: String,
-    },
-    email:{
-        type: String,
-    },
-    user: {
-        type: String,
-        require: true,
-    },
-    avatar:{
-        type:String
-    }
-}, {
-    timestamps: true,
+const empresaSchema = new mongoose.Schema({
+    nome: String,
+    email: { type: String, unique: true },
+    telefone: String,
+    cnpj: { type: String, unique: true },
+    cidade: String,
+    estado: String,
 });
 
-module.exports = model('Emp', EmpSchema);
+const Empresa = mongoose.model('Empresa', empresaSchema);
+
+module.exports = Empresa;

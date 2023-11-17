@@ -1,46 +1,51 @@
- const { Schema, model } = require("mongoose");
+const mongoose = require('mongoose');
 
-const DevSchema = new Schema({
-    name: {
-        type: String,
-        require: true,
-    },
-    cidade:{
-        type:String,
-    },
-    repositorios:{
-        type:Number,
-    },
-    senha:{
+const candidatoSchema = new mongoose.Schema({
+    nome: {
         type: String,
         required: true,
     },
-    email:{
+    email: {
         type: String,
+        required: true,
+        unique: true,
+        // Adicionando uma validação simples de formato de email
+        validate: {
+            validator: (value) => /\S+@\S+\.\S+/.test(value),
+            message: 'Formato de e-mail inválido',
+        },
     },
-    user: {
+    senha: {
         type: String,
-        require: true,
+        required: true,
     },
-    bio: String,
-    avatar: {
+    confirmarSenha: {
         type: String,
-        require: true,
+        required: true,
+        validate: {
+            validator: function (value) {
+                return this.senha === value;
+            },
+            message: 'As senhas não coincidem',
+        },
     },
-    likes: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Dev',
-    }],
-    matchs: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Dev',
-    }],
-    deslikes: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Dev',
-    }],
-}, {
-    timestamps: true,
+    telefone: String,
+    cpf: {
+        type: String,
+        required: true,
+        unique: true,
+        // Adicionando uma validação simples de formato de CPF
+        validate: {
+            validator: (value) => /\d{3}\.\d{3}\.\d{3}-\d{2}/.test(value),
+            message: 'Formato de CPF inválido',
+        },
+    },
+    cidade: String,
+    estado: String,
+    imagem: String,
+    descricao: String,
 });
 
-module.exports = model('Dev', DevSchema);
+const Candidato = mongoose.model('Candidato', candidatoSchema);
+
+module.exports = Candidato;

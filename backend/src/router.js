@@ -10,16 +10,18 @@ router.get('/', (req, res) => {
 });
 
 //CRUD do candidato desenvolvedor
-router.post('/devs', DevControler.store)
-router.get('/devs', DevControler.index)
-router.delete('/deleteDev', DevControler.deleteDev);
-router.patch('/updateDev', DevControler.updateDev);
+router.post('/candidatos', DevControler.criarCandidato);
+router.get('/candidatos', DevControler.obterCandidatos);
+router.get('/candidatos/:id', DevControler.obterCandidatoPorId);
+router.put('/candidatos/:id', DevControler.atualizarCandidato);
+router.delete('/candidatos/:id', DevControler.excluirCandidato);
 
 //CRUD do usuario empresa
-router.post('/emps', EmpControler.store)
-router.get('/emps', EmpControler.index)
-router.delete('/deleteEmp', EmpControler.deleteEmp);
-router.patch('/updateEmp', EmpControler.updateEmp);
+router.post('/empresas', EmpControler.criarEmpresa);
+router.get('/empresas', EmpControler.obterEmpresas);
+router.get('/empresas/:id', EmpControler.obterEmpresaPorId);
+router.put('/empresas/:id', EmpControler.atualizarEmpresa);
+router.delete('/empresas/:id', EmpControler.excluirEmpresa);
 
 
 module.exports = router;

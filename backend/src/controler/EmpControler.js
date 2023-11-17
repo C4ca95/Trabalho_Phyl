@@ -1,93 +1,63 @@
-const Emp = require('../model/Emp')
+const Empresa = require('../model/Emp');
 
-
-module.exports = {
-
-    async index(req, res) {
-        const { user } = req.headers
-        const users = await Vaga.find({ idEmp: user })
-        let resul = await List.listItems(users.reverse(), req.query.pg, req.query.vs)
-        return res.json(resul)
-    },
-
-
-    async store(req, res) {
-
-        const {type } = req.body;
-
-        if(type == true){
-            const {username,senha} = req.body
-            const userExist = await Emp.findOne({ user: username});
-
-            if (userExist) {
-                if(userExist.senha == senha){
-                    const avat = userExist.avatar
-                    userExist.avatar = avat
-                    return res.json(userExist)
-                }else{
-                    return res.json({ message: "Senha errada"})
-                }
-            }
-        }else{
-            const { user,cidade, email, avatar,senha} = req.body
-            const avat = 'https://getjobserver.herokuapp.com/image/' + avatar
-            const emp = await Emp.create({
-                user,
-                avatar: avat,
-                cidade,
-                email,
-                senha
-            })
-
-            return res.json(emp)
-        }
-    },
-
-    async deleteEmp(req, res) {
-        const { user } = req.headers;
-
-        try {
-            
-            const deletedEmp = await Emp.findOneAndDelete({ _id: user });
-
-            if (deletedEmp) {
-                return res.json({ message: "Empresa excluída com sucesso", deletedEmp });
-            } else {
-                return res.status(404).json({ error: "Empresa não encontrada" });
-            }
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ error: "Erro ao excluir a empresa" });
-        }
-    },
-
-    async updateEmp(req, res) {
-        const { user } = req.headers;
-
-        try {
-            
-            const updatedEmp = await Emp.findOneAndUpdate(
-                { _id: user },
-                { $set: req.body },
-                { new: true } 
-            );
-
-            if (updatedEmp) {
-                return res.json({ message: "Empresa atualizada com sucesso", updatedEmp });
-            } else {
-                return res.status(404).json({ error: "Empresa não encontrada" });
-            }
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ error: "Erro ao atualizar a empresa" });
-        }
-    },
-
-    async emp(req,res){
-
-        const {user} = req.headers
-        const emp = await Emp.findById(user)
-        return res.json(emp)
+exports.criarEmpresa = async (req, res) => {
+    try {
+        const novaEmpresa = new Empresa(req.body);
+        await novaEmpresa.save();
+        res.json(novaEmpresa);
+    } catch (error) {
+        res.status(400).json({ mensagem: error.message });
     }
+};
 
-}
+exports.obterEmpresas = async (req, res) => {
+    try {
+        const empresas = await Empresa.find();
+        res.json(empresas);
+    } catch (error) {
+        res.status(500).json({ mensagem: error.message });
+    }
+};
+
+exports.obterEmpresaPorId = async (req, res) => {
+    try {
+        const empresa = await Empresa.findById(req.params.id);
+        if (empresa) {
+            res.json(empresa);
+        } else {
+            res.status(404).json({ mensagem: 'Empresa não encontrada' });
+        }
+    } catch (error) {
+        res.status(500).json({ mensagem: error.message });
+    }
+};
+
+exports.atualizarEmpresa = async (req, res) => {
+    try {
+        const empresa = await Empresa.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+        if (empresa) {
+            res.json(empresa);
+        } else {
+            res.status(404).json({ mensagem: 'Empresa não encontrada' });
+        }
+    } catch (error) {
+        res.status(400).json({ mensagem: error.message });
+    }
+};
+
+exports.excluirEmpresa = async (req, res) => {
+    try {
+        const empresa = await Empresa.findByIdAndDelete(req.params.id);
+        if (empresa) {
+            res.json({ mensagem: 'Empresa excluída com sucesso' });
+        } else {
+            res.status(404).json({ mensagem: 'Empresa não encontrada' });
+        }
+    } catch (error) {
+        res.status(500).json({ mensagem: error.message });
+    }
+};
