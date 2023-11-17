@@ -3,7 +3,11 @@ import { CardLogin } from "./style";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import '../../assets/styles/global.css';
 
+
 const Signin = () => {
+
+
+
   return (
     <CardLogin>
       <div className="bg">

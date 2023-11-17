@@ -94,6 +94,8 @@ export const CardLogin = styled.div`
     margin-bottom: 1rem;
 }
 
+
+
 .img{
     height: 8rem;
     width: 8rem;
