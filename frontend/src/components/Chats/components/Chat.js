@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 
 import { Container } from './styles';
-import '../../../assets/styles/global.css';
 
 function Chat({ name, message, profilePic, timestamp }) {
   return (

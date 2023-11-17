@@ -9,6 +9,9 @@ import TinderCards from './components/Cards/TinderCards';
 import SwipeButtons from './components/Buttons/SwipeButtons';
 import Chats from './components/Chats/Chats';
 import ChatScreen from './components/Chats/ChatScreen/index';
+import Signup from './pages/Signup';
+import Signin from './pages/Signin';
+import SignupCompany from './pages/SignupCompany';
 
 function App() {
   return (
@@ -16,6 +19,17 @@ function App() {
 
      <Router>
        <Switch>
+          <Route path="/signup">
+              <Signup/>
+          </Route>
+
+          <Route path="/signup-company">
+              <SignupCompany/>
+          </Route>
+
+          <Route path="/signin">
+            <Signin/>
+          </Route>
          {/* Individual chat screen */}
           <Route path="/chat/:person">
             <Header backButton="/chat" />
@@ -35,6 +49,10 @@ function App() {
             {/*  Buttons bellow tinder cards */}
             <SwipeButtons />
           </Route>
+
+
+
+          
        </Switch>
      </Router>
 
