@@ -102,6 +102,9 @@ export const CardLogin = styled.div`
     border-radius: 50%;
     border: 2px solid var(--blue);
     margin-bottom: 1rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
     input{
         display: none;
     }
