@@ -41,6 +41,7 @@ const createDevFormSchema = z.object({
 const Signup = () => {
 
   const toast = useRef(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const { register, handleSubmit, setValue, formState: {errors} } = useForm({
     resolver: zodResolver(createDevFormSchema)
@@ -63,7 +64,6 @@ const Signup = () => {
     }
   }
 
-  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
