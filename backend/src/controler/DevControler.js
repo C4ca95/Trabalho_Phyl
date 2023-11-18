@@ -21,7 +21,7 @@ exports.criarCandidato = async (req, res) => {
     try {
         const novoCandidato = new Candidato(req.body);
         await novoCandidato.save();
-        res.json(novoCandidato);
+        res.json({mensagem: 'Candidato criado com sucesso!' });
     } catch (error) {
         res.status(400).json({ mensagem: error.message });
     }

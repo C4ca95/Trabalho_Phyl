@@ -34,11 +34,7 @@ const candidatoSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        // Adicionando uma validação simples de formato de CPF
-        validate: {
-            validator: (value) => /\d{3}\.\d{3}\.\d{3}-\d{2}/.test(value),
-            message: 'Formato de CPF inválido',
-        },
+
     },
     cidade: String,
     estado: String,
