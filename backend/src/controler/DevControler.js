@@ -1,12 +1,15 @@
 const Candidato = require('../model/Dev');
+const Empresa = require('../model/Emp');
+
 
 exports.loginCandidato = async (req, res) => {
     const { email, senha } = req.body;
 
     try {
         const candidato = await Candidato.findOne({ email, senha });
+        const empresa = await Empresa.findOne({ email, senha });
 
-        if (candidato) {
+        if (candidato || empresa) {
             // Autenticação bem-sucedida
             res.json({ mensagem: 'Login bem-sucedido', candidato });
         } else {
