@@ -1,6 +1,4 @@
-i
-import { CardLogin } from "../Signin/style";
-import { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { CardLogin } from "../Signin/style";
 import DevService from "../../services/DevService";
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,22 +14,21 @@ const createDevFormSchema = z.object({
   nome: z.string()
     .min(1, 'O nome é obrigatório')
     .max(50),
-  email: z.string(),
-  telefone: z.string(),
+  email: z.string().nonempty('O E-mail é origatório'),
+  telefone: z.string().nonempty('O telefone é obrigatório'),
   cnpj: z.string()
     .nonempty('O CNPJ é obrigatório'),
-  cidade: z.string(),
-  estado: z.string(),
+  cidade: z.string().nonempty('A cidade é obrigatório'),
+  estado: z.string().nonempty('O estado é obrigatório'),
   senha: z.string().nonempty('A senha é obrigatório'),
-  confirmarSenha: z.string()
-  .refine((value, data) => value !== data?.senha, {
-    message: 'As senhas não coincidem.',
-  }),
+  confirmarSenha: z.string(),
   descricao: z.string()
   .nonempty('A descrição é obrigatório'),
   image: z.optional(z.string())
- 
-  
+
+}).refine((data) => data.confirmarSenha === data?.senha, {
+  message: 'As senhas não coincidem.',
+  path: ['confirmarSenha']
 });
 
 const SignupCompany = () => {
@@ -47,14 +44,11 @@ const SignupCompany = () => {
     try{
       const res = await companyService.createCompany(data);
       if (res){
-       // alert(res.message)
         console.log(res)
         toast.current.show({severity:'success', summary: 'Success', detail:'Empresa criado com sucesso!', life: 3000});
       }
     } catch (e){
-      //alert(e.message)
       toast.current.show({severity:'error', summary: 'Error', detail: 'Erro ao criar o empresa' , life: 3000});
-
       console.log(e);
     }
   }
@@ -77,7 +71,7 @@ const SignupCompany = () => {
                 {errors.email && <span className="error-message">{errors.email.message}</span>}
                 <InputMask mask="(99) 9 9999-9999" className="input mb-2" placeholder="Telefone" {...register("telefone")} />
                 {errors.telefone && <span className="error-message">{errors.telefone.message}</span>}
-                <InputMask mask="999.999.999-99" className="input mb-2" placeholder="CPF" {...register("cnp")}/>
+                <InputMask mask="99.999.999/9999-99" className="input mb-2" placeholder="CNPJ" {...register("cnpj")}/>
                 {errors.cnpj && <span className="error-message">{errors.cnpj.message}</span>}
                 <input type="text" className="input mb-2" placeholder="Cidade" {...register("cidade")}/>
                 {errors.cidade && <span className="error-message">{errors.cidade.message}</span>}

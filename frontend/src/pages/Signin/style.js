@@ -2,6 +2,9 @@ import styled from 'styled-components';
 import bg from "../../assets/leadspacee.jpg";
 
 export const CardLogin = styled.div`
+    a{
+        text-align: center;
+    }
     .card{
         border-radius: 1rem;
         border: 1px solid #D8D8D8;
@@ -34,7 +37,7 @@ export const CardLogin = styled.div`
         color: var(--cyan);
         border-bottom: 1px solid var(--cyan);
         font-size: .75rem;
-        margin-left: 11.25rem;
+        margin-left: 9rem;
     }
 
 

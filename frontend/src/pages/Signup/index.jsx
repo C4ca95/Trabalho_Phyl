@@ -14,8 +14,8 @@ const createDevFormSchema = z.object({
   nome: z.string()
     .min(1, 'O nome é obrigatório')
     .max(50),
-  email: z.string(),
-  telefone: z.string(),
+  email: z.string().nonempty('O E-mail é obrigatório'),
+  telefone: z.string().nonempty('O telefone é obrigatório'),
   cpf: z.string()
     .nonempty('O CPF é obrigatório')
     .refine((value) => value.replace(/[^\d]/g, '').length === 11, {
@@ -24,19 +24,18 @@ const createDevFormSchema = z.object({
     .transform(cpf => {
       return cpf.replace(/[^\d]/g, '');
     }),
-  cidade: z.string(),
-  estado: z.string(),
+  cidade: z.string().nonempty('A cidade é obrigatório'),
+  estado: z.string().nonempty('O estado é obrigatório'),
   senha: z.string().nonempty('A senha é obrigatório'),
-  confirmarSenha: z.string()
-  .refine((value, data) => value !== data?.senha, {
-    message: 'As senhas não coincidem.',
-  }),
+  confirmarSenha: z.string(),
   descricao: z.string()
   .nonempty('A descrição é obrigatório'),
   image: z.optional(z.string())
- 
-  
-});
+
+}).refine((data) => data.confirmarSenha === data?.senha, {
+  message: 'As senhas não coincidem.',
+  path: ['confirmarSenha']
+})
 
 const Signup = () => {
 

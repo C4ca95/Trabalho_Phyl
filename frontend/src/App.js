@@ -14,6 +14,7 @@ import Signin from "./pages/Signin";
 import SignupCompany from "./pages/SignupCompany";
 import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
+import SelectRegister from "./pages/SelectRegister";
 
 function App() {
   return (
@@ -23,6 +24,10 @@ function App() {
           <Switch>
             <Route path="/signup">
               <Signup />
+            </Route>
+
+            <Route path="/select-register">
+              <SelectRegister />
             </Route>
 
             <Route path="/signup-company">
