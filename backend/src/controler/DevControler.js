@@ -10,8 +10,8 @@ exports.loginCandidato = async (req, res) => {
         const empresa = await Empresa.findOne({ email, senha });
 
         if (candidato || empresa) {
-            // Autenticação bem-sucedida
-            res.json({ mensagem: 'Login bem-sucedido', candidato });
+            if(candidato) res.json({ mensagem: 'Login bem-sucedido', user: candidato, role: 'candidato' });
+            else res.json({ mensagem: 'Login bem-sucedido', user: empresa, role: 'empresa' });
         } else {
             res.status(401).json({ mensagem: 'Credenciais inválidas' });
         }

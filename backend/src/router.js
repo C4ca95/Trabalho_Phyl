@@ -23,7 +23,7 @@ router.get('/empresas', EmpControler.obterEmpresas);
 router.get('/empresas/:id', EmpControler.obterEmpresaPorId);
 router.put('/empresas/:id', EmpControler.atualizarEmpresa);
 router.delete('/empresas/:id', EmpControler.excluirEmpresa);
-router.post('/login/empresa', EmpControler.loginEmpresa);
+//router.post('/login/empresa', EmpControler.loginEmpresa);
 
 
 module.exports = router;
