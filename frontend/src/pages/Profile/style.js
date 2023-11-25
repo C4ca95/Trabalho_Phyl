@@ -38,7 +38,7 @@ export const ContainerProfile = styled.div`
     }
 
     .data-profile{
-        padding: 2rem;
+        padding: 2rem 2rem 0 2rem;
     }
 
     .btn-area{
@@ -51,6 +51,27 @@ export const ContainerProfile = styled.div`
         padding: .6rem;
         margin-left: .5rem;
         margin-top: .5rem;
+    }
+
+    .jobs-vacancies{
+        padding: 0 2rem 2rem 2rem;
+    }
+
+    .jobs-vacancies h2{
+        border-top: 3px solid cyan;
+        margin-top: 1rem;
+        padding-top: 0.5rem;
+    }
+
+    .jobs-vacancies .btn-box{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .delete{
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
     }
 
 `
