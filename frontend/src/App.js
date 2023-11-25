@@ -15,6 +15,7 @@ import SignupCompany from "./pages/SignupCompany";
 import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import SelectRegister from "./pages/SelectRegister";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -37,6 +38,13 @@ function App() {
             <Route path="/signin">
               <Signin />
             </Route>
+
+            {/* Profile screen */}
+            <Route path="/profile">
+              <Header backButton="/" />
+              <Profile/>
+            </Route>
+
             {/* Individual chat screen */}
             <Route path="/chat/:person">
               <Header backButton="/chat" />

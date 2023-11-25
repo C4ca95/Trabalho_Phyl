@@ -22,7 +22,7 @@ function Header({ backButton }) {
       ) : (
         <HeaderIcon>
           <IconButton>
-            <PersonIcon className="header__icon" fontSize="large" />
+            <PersonIcon onClick={() => history.replace('/profile')} className="header__icon" fontSize="large" />
           </IconButton>
         </HeaderIcon>
       )}

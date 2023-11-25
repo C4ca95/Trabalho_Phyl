@@ -93,9 +93,7 @@ export const CardLogin = styled.div`
   width: 100%;
 }
 
-.mb-2{
-    margin-bottom: 1rem;
-}
+
 
 
 

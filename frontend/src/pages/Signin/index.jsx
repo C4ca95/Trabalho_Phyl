@@ -13,7 +13,7 @@ const authService = new AuthService();
 
 const loginSchema = z.object({
   email: z.string().nonempty("O email é obrigatório"),
-  password: z.string().nonempty("A senha é obrigatório"),
+  senha: z.string().nonempty("A senha é obrigatório"),
 })
 
 const Signin = () => {
@@ -29,12 +29,13 @@ const Signin = () => {
 
   const history = useHistory();
 
-
   const login = async (data) => {
     try{
       const res = await authService.login(data);
       if (res) {
         console.log(res);
+        localStorage.setItem('user', JSON.stringify(res.user))
+        localStorage.setItem('role', res.role)
         history.push('/');
       }
     }catch(e){
@@ -44,6 +45,7 @@ const Signin = () => {
 
   return (
     <CardLogin>
+
       <div className="bg">
         <div className="boxContent">
           <form className="card" onSubmit={handleSubmit(login)}>
@@ -51,8 +53,8 @@ const Signin = () => {
               <h2>Login</h2>
               <input type="text" className='input mb-2' placeholder='E-mail' {...register('email')}/>
               {errors.email && <span className="error-message">{errors.email.message}</span>}
-              <input type="text" className='input' placeholder='Senha' {...register('password')}/>
-              {errors.password && <span className="error-message">{errors.password.message}</span>}
+              <input type="text" className='input' placeholder='Senha' {...register('senha')}/>
+              {errors.senha && <span className="error-message">{errors.senha.message}</span>}
               </div>
               <Link className="forgotPassword">Esqueci minha senha</Link>
               <div className="buttonBox">
