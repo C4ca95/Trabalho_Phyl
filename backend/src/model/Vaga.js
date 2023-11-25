@@ -1,47 +1,16 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require('mongoose');
 
-const VagSchema = new Schema({
-    cidade:{
-        type:String,
-    },
-    emailContato:{
-        type: String,
-    },
-    idEmp: {
-        type: String,
-        require: true,
-    },
-    aberto: {
-        type: Boolean,
-        require: true,
-    },
-    user: {
-        type: String,
-        require: true,
-    },
-    atuacao:{
-        type:String,
-        required:true,
-    },
-    descricao: {type:String},
-    avatar: {
-        type: String,
-        require: true,
-    },
-    likes: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Vag',
-    }],
-    matchs: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Vag',
-    }],
-    deslikes: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Vag',
-    }],
-}, {
-    timestamps: true,
+const vagaSchema = new mongoose.Schema({
+  titulo: String,
+  descricao: String,
+  localizacao: String,
+  modalidade: String,
+  salario: String,
+  setor: String,
+  nivelExperiencia: String,
+  tipoContrato: String,
 });
 
-module.exports = model('Vag', VagSchema);
+const Vaga = mongoose.model('Vaga', vagaSchema);
+
+module.exports = Vaga;

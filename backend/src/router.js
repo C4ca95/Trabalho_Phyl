@@ -3,6 +3,7 @@ const router = express.Router();
 const DevControler = require('./controler/DevControler')
 //const multer = require('multer')
 const EmpControler = require('./controler/EmpControler')
+const vagaController = require('./controler/VagaControler');
 
 router.get('/', (req, res) => {
 
@@ -24,6 +25,13 @@ router.get('/empresas/:id', EmpControler.obterEmpresaPorId);
 router.put('/empresas/:id', EmpControler.atualizarEmpresa);
 router.delete('/empresas/:id', EmpControler.excluirEmpresa);
 //router.post('/login/empresa', EmpControler.loginEmpresa);
+
+// CRUD vagas
+router.post('/vagas', vagaController.criarVaga);
+router.get('/vagas', vagaController.listarVagas);
+router.get('/vagas/:id', vagaController.obterVagaPorId);
+router.patch('/vagas/:id', vagaController.atualizarVaga);
+router.delete('/vagas/:id', vagaController.excluirVaga);
 
 
 module.exports = router;

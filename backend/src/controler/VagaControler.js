@@ -1,72 +1,63 @@
-const axios = require('axios')
-const Emp = require('../model/Emp')
-const Vaga = require('../model/Vaga')
-const Dev = require('../model/Dev')
-const List = require('./listItems')
+const Vaga = require('../models/vagaModel');
 
-module.exports = {
+// Controladores CRUD
+const criarVaga = async (req, res) => {
+  try {
+    const novaVaga = new Vaga(req.body);
+    await novaVaga.save();
+    res.status(201).send(novaVaga);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
 
-    async index(req, res) {
-        const { user } = req.headers
+const listarVagas = async (req, res) => {
+  try {
+    const vagas = await Vaga.find();
+    res.send(vagas);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
 
-        const loggedUser = await Dev.findById(user)
-        const vagas = await Vaga.find({
-            $and: [
-                { _id: { $nin: loggedUser.likes } },
-                { _id: { $nin: loggedUser.deslikes } },
-                { aberto: true}
-            ],
-        })
+const atualizarVaga = async (req, res) => {
+  try {
+    const vaga = await Vaga.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.send(vaga);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
 
-        let resul = await List.listItems(vagas.reverse(), req.query.pg, req.query.vs)
-        return res.json(resul)
-    },
-
-    async store(req, res) {
-
-        const { id,cidade,emailC } = req.body;
-
-        const {avatar} = await Emp.findOne({ _id:id });
-        const {user} = await Emp.findOne({ _id:id });
-
-        const { atuacao,descricao} = req.body 
-
-        const vaga = await Vaga.create({
-            atuacao,
-            user,
-            descricao,
-            idEmp: id,
-            avatar,
-            cidade,
-            emailContato:emailC,
-            aberto: true
-        })
-
-        return res.json(vaga)
-    },
-
-    async fechar(req,res){
-        const { vagId } = req.params
-        const vaga = await Vaga.findByIdAndUpdate(vagId, {$set: {aberto: false}}, {new: true})
-        return res.json(vaga)
-    },
-
-    async matchs(req, res){
-        const { user } = req.headers
-        const devs = await Dev.find({matchs: user})
-        let resul = await List.listItems(devs.reverse(), req.query.pg, req.query.vs)
-        return res.json(resul)
-    },
-
-    async vag(req,res){
-
-        const {user} = req.headers
-        const emp = await Vaga.findById(user)
-        if(emp){
-            return res.json(emp)
-        }else{
-            return res.json({erro: "Sem user"})
-        }
+const excluirVaga = async (req, res) => {
+  try {
+    const vaga = await Vaga.findByIdAndDelete(req.params.id);
+    if (!vaga) {
+      res.status(404).send('Vaga não encontrada');
     }
+    res.send(vaga);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
 
-}
+
+const obterVagaPorId = async (req, res) => {
+    try {
+      const vaga = await Vaga.findById(req.params.id);
+      if (!vaga) {
+        res.status(404).send('Vaga não encontrada');
+      }
+      res.send(vaga);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  };
+  
+  module.exports = {
+    criarVaga,
+    listarVagas,
+    obterVagaPorId,
+    atualizarVaga,
+    excluirVaga,
+  };
