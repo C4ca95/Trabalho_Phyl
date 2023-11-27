@@ -1,4 +1,5 @@
-const Vaga = require('../models/vagaModel');
+const Vaga = require('../model/Vaga');
+const Empresa = require('../model/Emp');
 
 // Controladores CRUD
 const criarVaga = async (req, res) => {
@@ -46,9 +47,34 @@ const obterVagaPorId = async (req, res) => {
     try {
       const vaga = await Vaga.findById(req.params.id);
       if (!vaga) {
-        res.status(404).send('Vaga não encontrada');
+        return res.status(404).send('Vaga não encontrada');
       }
       res.send(vaga);
+    } catch (error) {
+      res.status(500).send(error);
+    }
+  };
+  
+  const listarVagasPorEmpresaId = async (req, res) => {
+    try {
+      // Obtenha o ID da empresa a partir dos parâmetros da solicitação
+      const idEmpresa = req.params.idEmpresa;
+  
+      // Verifique se a empresa existe
+      const empresa = await Empresa.findById(idEmpresa);
+      if (!empresa) {
+        return res.status(404).send('Empresa não encontrada');
+      }
+  
+      // Encontre todas as vagas associadas ao ID da empresa
+      const vagas = await Vaga.find({ idEmpresa: idEmpresa });
+  
+      // Verifique se há vagas associadas à empresa
+      if (vagas.length === 0) {
+        return res.status(404).send('Nenhuma vaga encontrada para esta empresa');
+      }
+  
+      res.send(vagas);
     } catch (error) {
       res.status(500).send(error);
     }
@@ -60,4 +86,5 @@ const obterVagaPorId = async (req, res) => {
     obterVagaPorId,
     atualizarVaga,
     excluirVaga,
+    listarVagasPorEmpresaId,
   };

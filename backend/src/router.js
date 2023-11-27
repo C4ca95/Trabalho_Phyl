@@ -32,6 +32,8 @@ router.get('/vagas', vagaController.listarVagas);
 router.get('/vagas/:id', vagaController.obterVagaPorId);
 router.patch('/vagas/:id', vagaController.atualizarVaga);
 router.delete('/vagas/:id', vagaController.excluirVaga);
+router.get('/vagas/empresa/:idEmpresa', vagaController.listarVagasPorEmpresaId);
+
 
 
 module.exports = router;
