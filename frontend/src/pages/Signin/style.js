@@ -93,10 +93,6 @@ export const CardLogin = styled.div`
   width: 100%;
 }
 
-
-
-
-
 .img{
     height: 8rem;
     width: 8rem;

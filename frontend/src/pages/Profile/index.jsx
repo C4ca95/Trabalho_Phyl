@@ -10,35 +10,70 @@ import { Toast } from "primereact/toast";
 import { useRef } from "react";
 import { Dialog } from 'primereact/dialog';
 import VagaService from "../../services/VagaService";
+import { Link, NavLink } from "react-router-dom/cjs/react-router-dom";
 
 const vagaService = new VagaService();
 
-const ModalCreateJobs = ({visible, setVisible}) => {
+const vacancieScehma = z.object({
+  titulo: z.string()
+    .min(1, 'O titulo é obrigatório')
+    .max(50),
+  localizacao: z.string().nonempty('A localização é obrigatório'),
+  modalidade: z.string().nonempty('A modalidade é obrigatório'),
+  salario: z.string().nonempty('O salário é obrigatório'),
+  setor: z.string().nonempty('O setor é obrigatório'),
+  nivelExperiencia: z.string().nonempty('O nível de experiência é obrigatório'),
+  tipoContrato: z.string().nonempty('O tipo de contrato é obrigatório'),
+  descricao: z.string()
+  .nonempty('A descrição é obrigatório'),
+});
 
-  const footerContent = (
-    <div className="footer">
-        <button className="btn-save mr-2" onClick={() => setVisible(false)}>Salvar</button>
-        <button className="btn-delete" onClick={() => setVisible(false)} autoFocus> Cancelar</button>
-    </div>
-);
 
+const ModalCreateJobs = ({visible, setVisible, user}) => {
+
+  const { register, handleSubmit, setValue, formState: {errors} } = useForm({
+    resolver: zodResolver(vacancieScehma)
+  });
+  const toast = useRef(null);
+
+  const createVacancie = async (data) => {
+    data.idEmpresa = user._id;
+    try{
+      const res = await vagaService.createVacancie(data);
+      if (res) {
+        console.log(res);
+        setVisible(false);
+        toast.current.show({severity:'success', summary: 'Success', detail:'Vaga criada com sucesso!', life: 3000});
+      }
+    }catch(e){
+      console.error(e)
+      toast.current.show({severity:'error', summary: 'Error', detail: 'Erro ao criar o vaga' , life: 3000});
+
+    }
+  }
 
   return (
     <>
+      <Toast ref={toast} />
       <button className="btn-primary mb-2" onClick={() => setVisible(true)}>Criar vaga</button>
-      <Dialog header="Criação de vagas" visible={visible} style={{ width: '90vw' }} onHide={() => setVisible(false)} footer={footerContent}>
-        <form action="">
-          <input type="text" className='input mb-2'  placeholder='Título da vaga'/>
-          <input type="text" className='input mb-2'  placeholder='Localização da vaga'/>
-          <select className='input mb-2'  placeholder='Modalidade'>
+      <Dialog header="Criação de vagas" visible={visible} style={{ width: '90vw' }} onHide={() => setVisible(false)}>
+        <form onSubmit={handleSubmit(createVacancie)}>
+          <input type="text" className='input mb-2' placeholder='Título da vaga' {...register('titulo')}/>
+          {errors.titulo && <span className="error-message">{errors.titulo.message}</span>}
+          <input type="text" className='input mb-2' placeholder='Localização da vaga' {...register('localizacao')}/>
+          {errors.localizacao && <span className="error-message">{errors.localizacao.message}</span>}
+          <select className='input mb-2'  placeholder='Modalidade' {...register('modalidade')}>
             <option value="" disabled selected>Modalidade</option>
             <option value="Presencial">Presencial</option>
             <option value="Hibrido">Hibrído</option>
             <option value="Remoto">Remoto</option>
           </select>
-          <input type="number" className='input mb-2'  placeholder='Salário'/>
-          <input type="text" className='input mb-2'  placeholder='Setor de atuação'/>
-          <select className='input mb-2'>
+          {errors.modalidade && <span className="error-message">{errors.modalidade.message}</span>}
+          <input type="number" className='input mb-2'  placeholder='Salário' {...register('salario')}/>
+          {errors.salario && <span className="error-message">{errors.salario.message}</span>}
+          <input type="text" className='input mb-2'  placeholder='Setor de atuação' {...register('setor')}/>
+          {errors.setor && <span className="error-message">{errors.setor.message}</span>}
+          <select className='input mb-2' {...register('nivelExperiencia')}>
             <option value="" disabled selected>Nível de Experiência</option>
             <option value="Estagio">Estágio</option>
             <option value="Trainee">Trainee</option>
@@ -46,13 +81,20 @@ const ModalCreateJobs = ({visible, setVisible}) => {
             <option value="Pleno">Pleno</option>
             <option value="Senior">Sênior</option>
           </select>
-          <select className='input mb-2'>
+          {errors.nivelExperiencia && <span className="error-message">{errors.nivelExperiencia.message}</span>}
+          <select className='input mb-2' {...register('tipoContrato')}>
             <option value="" disabled selected>Contrato</option>
             <option value="CLT">CLT</option>
             <option value="PJ">PJ</option>
             <option value="temporario">Temporário</option>
           </select>
-          <textarea className='input' placeholder='Descrição' name="desc" id="desc" cols="30" rows="4"></textarea>
+          {errors.tipoContrato && <span className="error-message">{errors.tipoContrato.message}</span>}
+          <textarea className='input' placeholder='Descrição' name="desc" id="desc" cols="30" rows="4" {...register('descricao')}></textarea>
+          {errors.descricao && <span className="error-message">{errors.descricao.message}</span>}
+          <div className="footer">
+            <button type="submit" className="btn-save mr-2">Salvar</button>
+            <button type="reset" className="btn-delete" onClick={() => setVisible(false)} autoFocus> Cancelar</button>
+          </div>
         </form>
       </Dialog>
     </>
@@ -143,11 +185,11 @@ const Profile = () => {
                 <button type='reset' className='btn-secondary'>Cancelar</button>
             </div>
         </form>
-       {localStorage.getItem('role') === 'candidato' && <div className="jobs-vacancies">
+       {localStorage.getItem('role') === 'empresa' && <div className="jobs-vacancies">
           <h2 className="mb-2">Vagas:</h2>
           <div className="btn-box">
-            <ModalCreateJobs visible={visible} setVisible={setVisible}/>
-            <button className="btn-primary">Visualizar vagas ativas</button>
+            <ModalCreateJobs visible={visible} setVisible={setVisible} user={user}/>
+            <NavLink to={'/list-jobs'} className="btn-primary">Visualizar vagas ativas</NavLink>
           </div>
         </div>}
         <div className="delete">

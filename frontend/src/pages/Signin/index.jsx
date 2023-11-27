@@ -53,7 +53,7 @@ const Signin = () => {
               <h2>Login</h2>
               <input type="text" className='input mb-2' placeholder='E-mail' {...register('email')}/>
               {errors.email && <span className="error-message">{errors.email.message}</span>}
-              <input type="text" className='input' placeholder='Senha' {...register('senha')}/>
+              <input type="password" className='input' placeholder='Senha' {...register('senha')}/>
               {errors.senha && <span className="error-message">{errors.senha.message}</span>}
               </div>
               <Link className="forgotPassword">Esqueci minha senha</Link>

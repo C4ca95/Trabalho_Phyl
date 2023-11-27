@@ -16,6 +16,7 @@ import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import SelectRegister from "./pages/SelectRegister";
 import Profile from "./pages/Profile";
+import ListJobs from "./pages/ListJobs";
 
 function App() {
   return (
@@ -37,6 +38,10 @@ function App() {
 
             <Route path="/signin">
               <Signin />
+            </Route>
+
+            <Route path="/list-jobs">
+              <ListJobs />
             </Route>
 
             {/* Profile screen */}

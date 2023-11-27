@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { Toast } from 'primereact/toast';
 import InputMask from 'react-input-mask';
 import CompanyService from "../../services/CompanyService";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const companyService = new CompanyService();
 
@@ -39,6 +40,8 @@ const SignupCompany = () => {
     resolver: zodResolver(createDevFormSchema)
   });
 
+  const history = useHistory();
+
   const createCompany = async (data) => {
     console.log(data);
     try{
@@ -46,6 +49,7 @@ const SignupCompany = () => {
       if (res){
         console.log(res)
         toast.current.show({severity:'success', summary: 'Success', detail:'Empresa criado com sucesso!', life: 3000});
+        history.push('/signin');
       }
     } catch (e){
       toast.current.show({severity:'error', summary: 'Error', detail: 'Erro ao criar o empresa' , life: 3000});

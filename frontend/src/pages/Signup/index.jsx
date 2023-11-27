@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { useForm } from "react-hook-form";
 import { Toast } from 'primereact/toast';
 import InputMask from 'react-input-mask';
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 
 const devService = new DevService();
@@ -46,6 +47,8 @@ const Signup = () => {
     resolver: zodResolver(createDevFormSchema)
   });
 
+  const history = useHistory();
+
   const createDev = async (data) => {
     console.log(data);
     try{
@@ -54,6 +57,7 @@ const Signup = () => {
        // alert(res.message)
         console.log(res)
         toast.current.show({severity:'success', summary: 'Success', detail:'Candidato criado com sucesso!', life: 3000});
+        history.push('/signin');
       }
     } catch (e){
       //alert(e.message)
