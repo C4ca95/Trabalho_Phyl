@@ -9,7 +9,8 @@ const vagaSchema = new mongoose.Schema({
   setor: String,
   nivelExperiencia: String,
   tipoContrato: String,
-  idEmpresa: String
+  idEmpresa: String,
+  likes: [String]
 });
 
 const Vaga = mongoose.model('Vaga', vagaSchema);

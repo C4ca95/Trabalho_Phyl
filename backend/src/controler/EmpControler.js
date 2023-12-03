@@ -1,28 +1,12 @@
 const Empresa = require('../model/Emp');
 
-// exports.loginEmpresa = async (req, res) => {
-//     const { email, senha } = req.body;
-
-//     try {
-//         const empresa = await Empresa.findOne({ email, senha });
-
-//         if (empresa) {
-//             // Autenticação bem-sucedida
-//             res.json({ mensagem: 'Login bem-sucedido', empresa });
-//         } else {
-//             res.status(401).json({ mensagem: 'Credenciais inválidas' });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ mensagem: 'Erro no servidor', error });
-//     }
-// };
 
 exports.criarEmpresa = async (req, res) => {
     try {
         const novaEmpresa = new Empresa(req.body);
         await novaEmpresa.save();
         res.json(novaEmpresa);
-    } catch (error) {
+    } catch (error) {a
         res.status(400).json({ mensagem: error.message });
     }
 };
