@@ -39,6 +39,11 @@ const empresaSchema = new mongoose.Schema({
     cidade: String,
     estado: String,
     descricao: String,
+    planoAssinatura: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'PlanoAssinatura',
+    },
+    likesDisponiveis: { type: Number, default: 30 },
 });
 
 const Empresa = mongoose.model('Empresa', empresaSchema);

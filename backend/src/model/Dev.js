@@ -40,6 +40,12 @@ const candidatoSchema = new mongoose.Schema({
     estado: String,
     imagem: String,
     descricao: String,
+    planoAssinatura: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'PlanoAssinatura',
+    },
+    likesDisponiveis: { type: Number, default: 30 },
+    likes: [String]
 });
 
 const Candidato = mongoose.model('Candidato', candidatoSchema);

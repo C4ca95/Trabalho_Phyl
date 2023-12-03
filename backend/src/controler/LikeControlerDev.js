@@ -1,40 +1,36 @@
-const Dev = require('../model/Dev')
-const Vaga = require('../model/Vaga')
+const Dev = require('../model/Dev');
+const Empresa = require('../model/Emp');
+const Match = require('../model/Match');
 
-module.exports = {
-    async store(req, res) {
+exports.darLikeDev = async (req, res) => {
+    const { userId, perfilAlvoId } = req.body;
 
+    try {
+        const usuario = await Empresa.findById(userId);
+        const perfilAlvo = await Dev.findById(perfilAlvoId);
 
-        const { user } = req.headers
-        const { empId } = req.params
-        
-        const targetVag = await Vaga.findById(empId)
-        const loggedDev = await Dev.findById(user)
-
-        if (!targetVag) {
-            return res.status(400).json({ error: `Dev not exist` })
+        if (!usuario || !perfilAlvo) {
+            return res.status(404).json({ mensagem: 'Usuário ou perfil alvo não encontrado' });
         }
 
-        if (targetVag.likes.includes(loggedDev._id)) {
-            const loggedSocket = req.connectedUsers[user]
-            const targetSocket = req.connectedUsers[empId]
-            loggedDev.matchs.push(targetVag)
-            targetVag.matchs.push(loggedDev)
-            targetVag.save()
+        if (usuario.likes.includes(perfilAlvoId)) {
+            // Usuário empresa curtiu o candidato ou vice-versa
+            const match = new Match({ dev: userId, empresa: perfilAlvoId });
+            await match.save();
 
-            if(loggedSocket){
-                req.io.to(loggedSocket).emit('match', targetVag)
-            }
+            // Atualiza o número de likes disponíveis
+            usuario.likesDisponiveis -= 1;
+            await usuario.save();
 
-            
-            if(targetSocket){
-                req.io.to(targetSocket).emit('match', loggedDev)
-            }
+            return res.json({ mensagem: 'Match realizado com sucesso!', match });
         }
 
-        loggedDev.likes.push(targetVag._id)
-        await loggedDev.save()
+        // Adiciona o like do usuário empresa à lista de likes do candidato
+        usuario.likes.push(perfilAlvoId);
+        await usuario.save();
 
-        return res.json(loggedDev)
+        return res.json({ mensagem: 'Like registrado com sucesso!' });
+    } catch (error) {
+        return res.status(500).json({ mensagem: 'Erro no servidor', error });
     }
-}
+};

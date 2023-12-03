@@ -1,46 +1,36 @@
-const Dev = require('../model/Dev')
-const Vaga = require('../model/Vaga')
-const mns = require('../model/Mensagem')
+const Dev = require('../model/Dev');
+const Empresa = require('../model/Emp');
+const Match = require('../model/Match');
 
-module.exports = {
-    async store(req, res) {
+exports.darLikeEmp = async (req, res) => {
+    const { userId, perfilAlvoId } = req.body;
 
+    try {
+        const usuario = await Dev.findById(userId);
+        const perfilAlvo = await Empresa.findById(perfilAlvoId);
 
-        const { user } = req.headers
-        const { devId } = req.params
-
-        const loggedVag = await Vaga.findById(user)
-        const targetDev = await Dev.findById(devId)
-
-        if (!targetDev) {
-            return res.status(400).json({ error: `Dev not exist` })
+        if (!usuario || !perfilAlvo) {
+            return res.status(404).json({ mensagem: 'Usuário ou perfil alvo não encontrado' });
         }
 
-        if (targetDev.likes.includes(loggedVag._id)) {
-            const loggedSocket = req.connectedUsers[user]
-            const targetSocket = req.connectedUsers[devId]
-            loggedVag.matchs.push(targetDev)
-            targetDev.matchs.push(loggedVag)
-            targetDev.save()
+        if (usuario.likes.includes(perfilAlvoId)) {
+            // Usuário empresa curtiu o candidato ou vice-versa
+            const match = new Match({ dev: userId, empresa: perfilAlvoId });
+            await match.save();
 
-            await mns.create({
-                idEmp:user,
-                idDev: devId
-            })
+            // Atualiza o número de likes disponíveis
+            usuario.likesDisponiveis -= 1;
+            await usuario.save();
 
-            if(loggedSocket){
-                req.io.to(loggedSocket).emit('match', targetDev)
-            }
-
-            
-            if(targetSocket){
-                req.io.to(targetSocket).emit('match', loggedVag)
-            }
+            return res.json({ mensagem: 'Match realizado com sucesso!', match });
         }
-        
-        loggedVag.likes.push(targetDev._id)
-        await loggedVag.save()
-       
-        return res.json(loggedVag)
+
+        // Adiciona o like do usuário empresa à lista de likes do candidato
+        usuario.likes.push(perfilAlvoId);
+        await usuario.save();
+
+        return res.json({ mensagem: 'Like registrado com sucesso!' });
+    } catch (error) {
+        return res.status(500).json({ mensagem: 'Erro no servidor', error });
     }
-}
+};
