@@ -37,5 +37,11 @@ export default class DevService {
         if (data) return data;
         return false;
     }
+
+    async getEmpMatch(id){
+        const {data} = await this.axios.get(`/obterEmpresaSemMatch/${id}`);
+        if (data) return data;
+        return false;
+    }
     
 }

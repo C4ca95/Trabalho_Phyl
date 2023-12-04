@@ -41,5 +41,11 @@ export default class CompanyService {
         if (data) return data;
         return false;
     }
+
+    async getDevsMatch(id){
+        const {data} = await this.axios.get(`/obterCandidatoSemMatch/${id}`);
+        if (data) return data;
+        return false;
+    }
     
 }

@@ -119,6 +119,7 @@ const Profile = () => {
     resolver: zodResolver(userSchema)
   });
   const [selectedImage, setSelectedImage] = useState(null);
+  const [userImage, setUserImage] = useState(null);
   const [user, setUser] = useState(null);
   const toast = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -161,13 +162,16 @@ const Profile = () => {
 
   useEffect(() => {
     const user = localStorage.getItem('user');
-    setUser(JSON.parse(user));
+    const userJson = JSON.parse(user);
+    setUser(userJson);
+    setUserImage(`http://localhost:3333/image/${userJson.image}`)
+
   }, []);
 
   return (
     <ContainerProfile>
       <Toast ref={toast} />
-        <div className="image-profile" style={selectedImage ? {backgroundImage: `url(${URL.createObjectURL(selectedImage)})`} : null}>
+        <div className="image-profile" style={userImage ? {backgroundImage: `url(${userImage})`} : (selectedImage ? {backgroundImage: `url(${URL.createObjectURL(selectedImage)})`} : null)}>
             <label htmlFor="picture"></label>
             <input onChange={handleImageChange} name='picture' id='picture' type="file" />
         </div>
