@@ -4,9 +4,14 @@ const Empresa = require('../model/Emp');
 // Controladores CRUD
 const criarVaga = async (req, res) => {
   try {
+    const { idEmpresa } = req.body;
     const novaVaga = new Vaga(req.body);
     await novaVaga.save();
-    res.status(201).send(novaVaga);
+    const emp = await Empresa.findById(idEmpresa);
+    if (emp){
+      emp.vagas.push(novaVaga);
+    }
+    res.status(201).send({novaVaga, message: 'Vaga criada com sucesso!'});
   } catch (error) {
     res.status(400).send(error);
   }

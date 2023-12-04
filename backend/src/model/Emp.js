@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const empresaSchema = new mongoose.Schema({
+    image: String,
     nome: {
         type: String,
         required: true,
@@ -39,11 +40,17 @@ const empresaSchema = new mongoose.Schema({
     cidade: String,
     estado: String,
     descricao: String,
+    vagas: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Vagas',
+    }],
     planoAssinatura: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'PlanoAssinatura',
     },
-    likesDisponiveis: { type: Number, default: 30 },
+    likesDisponiveis: { type: Number, default: 10 },
+    matches: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Match' }],
+
 });
 
 const Empresa = mongoose.model('Empresa', empresaSchema);
