@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const candidatoSchema = new mongoose.Schema({
+    image: String,
     nome: {
         type: String,
         required: true,
@@ -38,14 +39,15 @@ const candidatoSchema = new mongoose.Schema({
     },
     cidade: String,
     estado: String,
-    imagem: String,
     descricao: String,
     planoAssinatura: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'PlanoAssinatura',
     },
-    likesDisponiveis: { type: Number, default: 30 },
-    likes: [String]
+    likesDisponiveis: { type: Number, default: 10 },
+    likes: [String],
+    matches: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Match' }],
+
 });
 
 const Candidato = mongoose.model('Candidato', candidatoSchema);

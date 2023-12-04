@@ -51,8 +51,13 @@ const Signup = () => {
 
   const createDev = async (data) => {
     console.log(data);
+    const formData = new FormData();
+    for (const [key, value] of Object.entries(data)) {
+      formData.append(key, value);
+    }
+    if(selectedImage) formData.append('image', selectedImage);
     try{
-      const res = await devService.createDev(data);
+      const res = await devService.createDev(formData);
       if (res){
        // alert(res.message)
         console.log(res)

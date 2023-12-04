@@ -5,7 +5,9 @@ const Emp = require('../model/Emp');
 const planoController = {
   criarPlano: async (req, res) => {
     try {
-      const novoPlano = await PlanoAssinatura.create(req.body);
+      //const novoPlano = await PlanoAssinatura.create(req.body);
+      const novoPlano = new PlanoAssinatura(req.body);
+      await novoPlano.save();
       res.json(novoPlano);
     } catch (error) {
       res.status(500).json({ error: 'Erro ao criar o plano de assinatura' });

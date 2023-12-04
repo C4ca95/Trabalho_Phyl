@@ -17,6 +17,7 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import SelectRegister from "./pages/SelectRegister";
 import Profile from "./pages/Profile";
 import ListJobs from "./pages/ListJobs";
+import Plans from "./pages/Plans/indes";
 
 function App() {
   return (
@@ -42,6 +43,11 @@ function App() {
 
             <Route path="/list-jobs">
               <ListJobs />
+            </Route>
+
+            <Route path="/plans">
+              <Header backButton="/profile" />
+              <Plans />
             </Route>
 
             {/* Profile screen */}

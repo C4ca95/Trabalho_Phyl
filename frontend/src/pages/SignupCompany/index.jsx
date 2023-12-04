@@ -41,9 +41,15 @@ const SignupCompany = () => {
   });
 
   const history = useHistory();
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const createCompany = async (data) => {
     console.log(data);
+    const formData = new FormData();
+    for (const [key, value] of Object.entries(data)) {
+      formData.append(key, value);
+    }
+    if(selectedImage) formData.append('image', selectedImage);
     try{
       const res = await companyService.createCompany(formData);
       if (res){
@@ -57,6 +63,11 @@ const SignupCompany = () => {
     }
   }
 
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(file);
+  };
+
   return (
     <CardLogin>
       <Toast ref={toast} />
@@ -66,9 +77,9 @@ const SignupCompany = () => {
             <div className="card">
               <div className="inputBox">
                 <h2>Registrar Empresa</h2>
-                {/* <label className="img" for='profile-img'>
-                  <input type="file" id="profile-img"/>
-                </label> */}
+                <label className="img" htmlFor='profile-img' style={selectedImage ? {backgroundImage: `url(${URL.createObjectURL(selectedImage)})`} : null}>
+                <input onChange={handleImageChange} accept="image/*" type="file" id="profile-img"/>
+              </label>
                  <input type="text" className="input mb-2" placeholder="Nome" {...register("nome")}/>
                 {errors.nome && <span className="error-message">{errors.nome.message}</span>}
                 <input type="text" className="input mb-2" placeholder="E-mail" {...register("email")}/>

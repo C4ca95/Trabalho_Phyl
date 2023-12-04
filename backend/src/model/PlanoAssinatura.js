@@ -7,9 +7,11 @@ const planoAssinaturaSchema = new mongoose.Schema({
   likeBeneficio: Number,
   duracao: String,
   status: Boolean,
-  dataInicioVigencia: Date,
-  dataTerminoVigencia: Date,
-  opcoesPagamento: [String],
+  opcoesPagamento: {
+    type: [String],
+    default: ['Cartao', 'PIX'], // Valor padrão
+    enum: ['PIX', 'Cartao'],
+},
 });
 
 const PlanoAssinatura = mongoose.model('PlanoAssinatura', planoAssinaturaSchema);

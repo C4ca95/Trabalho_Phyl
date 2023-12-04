@@ -74,4 +74,8 @@ export const ContainerProfile = styled.div`
         flex-direction: column;
     }
 
+    .planos{
+        background: green !important;
+    }
+
 `

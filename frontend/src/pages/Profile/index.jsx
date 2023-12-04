@@ -197,6 +197,7 @@ const Profile = () => {
           </div>
         </div>}
         <div className="delete">
+          <Link to={'/plans'} className="btn-primary mb-2 planos">Verificar Planos de Assinatura</Link>
           <button className="btn-delete">Deletar Conta</button>
         </div>
 
