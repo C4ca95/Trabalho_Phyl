@@ -3,20 +3,50 @@ import TinderCard from 'react-tinder-card';
 
 import database from '../../Firebase/Firebase';
 import { Container, Div, CardContainer } from './styles';
+import DevService from '../../services/DevService';
+import CompanyService from '../../services/CompanyService';
+import SwipeButtons from '../Buttons/SwipeButtons';
+
+const devService = new DevService();
+const empService = new CompanyService();
 
 function TinderCards() {
-  const [people, setPeople] = useState([
-    {
-      url: 'https://diariodonordeste.verdesmares.com.br/image/contentid/policy:1.3325990:1674218339/Google.jpg?f=16x9&h=720&q=0.8&w=1280&$p$f$h$q$w=62fc6d3',
-      name: 'Google'
-    }, {
-      url: 'https://miro.medium.com/v2/resize:fit:720/format:webp/1*Z3rSj8K19g6tSNWxAki13Q.jpeg',
-      name: 'apple'
-    }
-  ]);
+  const [otherUSers, setOtherUsers] = useState(null);
+  const [user, setUser] = useState();
 
   useEffect(() => {
-   
+    const user = localStorage.getItem('user');
+    const userJson = JSON.parse(user);
+    setUser(userJson);
+
+   if (localStorage.getItem('role') === 'empresa'){
+    const getCandidatos = async () => {
+      try {
+        const res = await empService.getDevsMatch(userJson._id);
+        if (res){
+          console.log(res);
+          setOtherUsers(res);
+        }
+      }catch(e){
+        console.error(e);
+      }
+    }
+    getCandidatos();
+
+   } else {
+    const getEmpresas = async () => {
+      try {
+        const res = await devService.getEmpMatch(userJson._id);
+        if (res){
+          console.log(res);
+          setOtherUsers(res);
+        }
+      }catch(e){
+        console.error(e);
+      }
+    }
+    getEmpresas();
+   }
 
   }, [])
  // const people = [];
@@ -26,22 +56,23 @@ function TinderCards() {
 
   return( 
     <Container>
-      <CardContainer className="tinderCards_cardContainer">
-        {people.map(person => (
+      {otherUSers && <CardContainer className="tinderCards_cardContainer">
+        {otherUSers.map(person => (
           <TinderCard
             className="swipe"
-            key={person.name}
+            key={person.nome}
             preventSwipe={['up', 'down']}
           >
             <Div
-              style={{ backgroundImage: `url(${person.url})` }}
+              style={{ backgroundImage: `url(http://localhost:3333/image/${person.image})` }}
               className="card"
             >
-              <h3>{person.name}</h3>
+              <h3>{person.nome}</h3>
             </Div>
           </TinderCard>
         ))}
-      </CardContainer>
+      </CardContainer>}
+      <SwipeButtons/>
     </Container>
   );
 }

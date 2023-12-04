@@ -45,7 +45,7 @@ const SignupCompany = () => {
   const createCompany = async (data) => {
     console.log(data);
     try{
-      const res = await companyService.createCompany(data);
+      const res = await companyService.createCompany(formData);
       if (res){
         console.log(res)
         toast.current.show({severity:'success', summary: 'Success', detail:'Empresa criado com sucesso!', life: 3000});

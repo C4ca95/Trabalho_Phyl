@@ -66,8 +66,6 @@ function App() {
             <Route path="/">
               <Header />
               <TinderCards />
-              {/*  Buttons bellow tinder cards */}
-              <SwipeButtons />
             </Route>
           </Switch>
         </Router>
